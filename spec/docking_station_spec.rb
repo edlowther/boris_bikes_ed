@@ -1,17 +1,15 @@
 require 'docking_station'
 
 describe DockingStation do
-  let(:bike) { double :bike }
-  let(:faulty_bike) { double :faulty_bike }
+  let(:bike) { double(:bike, :working => true) }
+  let(:faulty_bike) { double(:bike, :working => false) }
 
   it 'has a method release_bike that returns a bike' do
-    allow(bike).to receive(:working).and_return(true)
     subject.dock bike
     expect(subject.release_bike).to eq bike
   end
 
   it 'has a method release_bike that returns a working bike' do
-    allow(bike).to receive(:working).and_return(true)
     subject.dock bike
     expect(subject.release_bike.working).to eq true
   end
@@ -22,19 +20,16 @@ describe DockingStation do
   end
 
   it 'enables users to check a faulty bike that has been docked' do
-    allow(bike).to receive(:working).and_return(false)
-    subject.dock bike
+    subject.dock faulty_bike
     expect(subject.docked_bikes[0].working).to eq false
   end
 
   it 'enables users to check a working bike that has been docked' do
-    allow(bike).to receive(:working).and_return(true)
     subject.dock bike
     expect(subject.docked_bikes[0].working).to eq true
   end
 
   it 'enables users to release the bike that has been docked' do
-    allow(bike).to receive(:working).and_return(true)
     subject.dock bike
     expect(subject.release_bike).to eq bike
   end
@@ -57,8 +52,6 @@ describe DockingStation do
   end
 
   it 'releases a working bike if there is one' do
-    allow(bike).to receive(:working).and_return(true)
-    allow(faulty_bike).to receive(:working).and_return(false)
     15.times do
       subject.dock [bike, faulty_bike].sample
     end
@@ -67,7 +60,6 @@ describe DockingStation do
   end
 
   it 'reduces the number of bikes by one if a bike is released' do
-    allow(bike).to receive(:working).and_return(true)
     16.times do
       subject.dock bike
     end
@@ -76,7 +68,6 @@ describe DockingStation do
   end
 
   it 'does not release a bike if all the docked bikes are faulty' do
-    allow(faulty_bike).to receive(:working).and_return(false)
     16.times do
       subject.dock faulty_bike
     end
@@ -84,8 +75,6 @@ describe DockingStation do
   end
 
   it 'docks bikes whether faulty or not' do
-    allow(bike).to receive(:working).and_return(true)
-    allow(faulty_bike).to receive(:working).and_return(false)
     subject.dock bike
     subject.dock faulty_bike
     expect(subject.docked_bikes.length).to eq 2
