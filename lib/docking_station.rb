@@ -1,6 +1,3 @@
-require_relative 'Bike'
-
-
 class DockingStation
 
   attr_reader :docked_bikes, :capacity
@@ -12,7 +9,12 @@ class DockingStation
 
   def release_bike
     raise 'No bike available' if empty?
-    @docked_bikes.shift
+    first_working_bike = @docked_bikes.select { |docked_bike| docked_bike.working }.shift
+    if first_working_bike
+      @docked_bikes.delete_at(@docked_bikes.index(first_working_bike))
+      return first_working_bike
+    end
+    raise 'No working bikes'
   end
 
   def dock bike
