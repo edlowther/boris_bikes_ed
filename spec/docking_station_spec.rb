@@ -2,7 +2,7 @@ require 'docking_station'
 
 describe DockingStation do
   let(:bike) { double(:bike, :working => true) }
-  let(:faulty_bike) { double(:bike, :working => false) }
+  let(:faulty_bike) { double(:faulty_bike, :working => false) }
 
   it 'has a method release_bike that returns a bike' do
     subject.dock bike

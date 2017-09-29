@@ -1,3 +1,10 @@
-require './lib/DockingStation'
+require './lib/docking_station'
+require './lib/van'
+require './lib/garage'
 
-station = DockingStation.new(10)
+van = Van.new
+garage = Garage.new
+
+van.collect_broken_bikes
+garage.fix_bikes
+van.distribute_fixed_bikes
